@@ -33,10 +33,12 @@ public class SpringWithLambdaApplication {
 
 
 	//get all items
-	@Bean //Remember, we NEED these functions to be "functional beans" to be noticed by lambda
+	@Bean //Remember, we need these functions to be "functional beans" to be noticed by lambda
 	public Supplier<List<String>> getItems(){
-
-		//realistically, this is where we'd defer to the service (which would get data from the DAO)
+	
+		//this is a supplier function, which will return data to the user
+		
+		//realistically, this is where we'd defer to the service (which would get data from the DAO etc)
 		//but here, we'll just an ArrayList of Strings to represent items
 
 		ArrayList<String> items = new ArrayList<>();
@@ -44,16 +46,16 @@ public class SpringWithLambdaApplication {
 		items.add("goop");
 		items.add("a chicken coop");
 
-		return () -> items; //remember, lambdas either need to take in a value or just ()
+		return () -> items; //remember, Java lambdas either need to take in some value(s) or just ()
 
 	}
 
-	//insert items
+	//insert item
 	@Bean
 	public Consumer<String> insertItem(){
 
 		//since this is a Consumer type function, we won't return anything
-		//but we CAN see this inputted value in the logs for our Lambda
+		//but we CAN see this inputted value printed in the logs for our Lambda
 
 		return value -> System.out.println(value);
 
@@ -62,12 +64,12 @@ public class SpringWithLambdaApplication {
 
 	//get item by id (path param example)
 	@Bean
-	public Function<APIGatewayProxyRequestEvent, String> myFunction() {
+	public Function<APIGatewayProxyRequestEvent, String> getItemById() {
 		return input -> {
 			//Extract path parameters from the event
 			String itemId = input.getPathParameters().get("itemId");
 
-			//Your Lambda function logic here
+			//The rest of the function logic here
 			String response = "Received itemId: " + itemId;
 
 			return response;
